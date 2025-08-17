@@ -11,7 +11,7 @@ const app = express();
 
 // Middleware
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "../frontend/public")));
 
 app.post("/api/payment1", async (req, res) => {
   const { genre, email, message, date_inscription } = req.body;
