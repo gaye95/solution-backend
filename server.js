@@ -1,4 +1,4 @@
-process.env.NODE_TLS_REJECT_UUTHORIZED = "0";
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -9,10 +9,14 @@ require("dotenv").config();
 
 const app = express();
 
+// 🔥 CONFIGURATION DU NOUVEAU DOMAINE
+const MAIN_DOMAIN = "https://www.omar-gaye-portfolio.shop";
+
 // 🔥 MIDDLEWARES ESSENTIELS
 app.use(cors({
   origin: [
-    "https://solution-frontend-fq8e.vercel.app",
+    MAIN_DOMAIN,
+    "https://omar-gaye-portfolio.shop",
     "http://localhost:3000",
     "http://localhost:3001"
   ],
@@ -28,6 +32,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
   res.json({ 
     message: "✅ Backend Solution Confidence is running!",
+    domain: MAIN_DOMAIN,
     timestamp: new Date().toISOString(),
     status: "OK"
   });
@@ -67,6 +72,7 @@ app.post("/api/paiement1", async (req, res) => {
           <li><b>Email :</b> ${email}</li>
           <li><b>Message :</b> ${message}</li>
           <li><b>Date :</b> ${date_inscription || new Date().toLocaleString('fr-FR')}</li>
+          <li><b>Domaine :</b> ${MAIN_DOMAIN}</li>
         </ul>
       `,
     });
@@ -80,13 +86,13 @@ app.post("/api/paiement1", async (req, res) => {
       command_name: "Solution Confidence - Formule 1",
       env: "test",
 
-      // URLs de redirection
-      success_url: "https://solution-frontend-fq8e.vercel.app/success.html",
-      cancel_url: "https://solution-frontend-fq8e.vercel.app/cancel.html",
+      // 🔥 URLs DE REDIRECTION AVEC NOUVEAU DOMAINE
+      success_url: `${MAIN_DOMAIN}/success.html`,
+      cancel_url: `${MAIN_DOMAIN}/cancel.html`,
       ipn_url: "https://solution-backend-2.onrender.com/api/ipn",
 
       customer_email: email,
-      customer_message: message.substring(0, 255), // Limiter la longueur
+      customer_message: message.substring(0, 255),
     };
 
     const headers = {
@@ -100,7 +106,7 @@ app.post("/api/paiement1", async (req, res) => {
       paytechData,
       { 
         headers,
-        timeout: 10000 // Timeout de 10 secondes
+        timeout: 10000
       }
     );
 
@@ -165,6 +171,7 @@ app.post("/api/paiement2", async (req, res) => {
           <li><b>Email :</b> ${email}</li>
           <li><b>Message :</b> ${message}</li>
           <li><b>Date :</b> ${date_inscription || new Date().toLocaleString('fr-FR')}</li>
+          <li><b>Domaine :</b> ${MAIN_DOMAIN}</li>
         </ul>
       `,
     });
@@ -176,9 +183,12 @@ app.post("/api/paiement2", async (req, res) => {
       ref_command: "CMD2_" + Date.now(),
       command_name: "Solution Confidence - Formule 2",
       env: "test",
-      success_url: "https://solution-frontend-fq8e.vercel.app/success.html",
-      cancel_url: "https://solution-frontend-fq8e.vercel.app/cancel.html",
+      
+      // 🔥 URLs DE REDIRECTION AVEC NOUVEAU DOMAINE
+      success_url: `${MAIN_DOMAIN}/success.html`,
+      cancel_url: `${MAIN_DOMAIN}/cancel.html`,
       ipn_url: "https://solution-backend-2.onrender.com/api/ipn",
+      
       customer_email: email,
       customer_message: message.substring(0, 255),
     };
@@ -251,6 +261,7 @@ app.post("/api/paiement3", async (req, res) => {
           <li><b>Email :</b> ${email}</li>
           <li><b>Message :</b> ${message}</li>
           <li><b>Date :</b> ${date_inscription || new Date().toLocaleString('fr-FR')}</li>
+          <li><b>Domaine :</b> ${MAIN_DOMAIN}</li>
         </ul>
       `,
     });
@@ -262,9 +273,12 @@ app.post("/api/paiement3", async (req, res) => {
       ref_command: "CMD3_" + Date.now(),
       command_name: "Solution Confidence - Formule 3",
       env: "test",
-      success_url: "https://solution-frontend-fq8e.vercel.app/success.html",
-      cancel_url: "https://solution-frontend-fq8e.vercel.app/cancel.html",
+      
+      // 🔥 URLs DE REDIRECTION AVEC NOUVEAU DOMAINE
+      success_url: `${MAIN_DOMAIN}/success.html`,
+      cancel_url: `${MAIN_DOMAIN}/cancel.html`,
       ipn_url: "https://solution-backend-2.onrender.com/api/ipn",
+      
       customer_email: email,
       customer_message: message.substring(0, 255),
     };
@@ -332,7 +346,8 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`✅ Serveur démarré sur le port ${PORT}`);
   console.log(`📍 URL: http://localhost:${PORT}`);
-  console.log(`🌐 Environnement: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🌐 Domaine frontend: ${MAIN_DOMAIN}`);
+  console.log(`⚙️ Environnement: ${process.env.NODE_ENV || 'development'}`);
 });
 
 module.exports = app;
